@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/pkg/errors"
@@ -17,13 +18,30 @@ import (
 //
 // If you add non-reference types to your configuration struct, be sure to rewrite Clone as a deep
 // copy appropriate for your types.
+
+type ProxyRule struct {
+	ActionRegExp string
+	BotUserId    string
+}
+
 type configuration struct {
+	ProxyRules []ProxyRule
 }
 
 // Clone shallow copies the configuration. Your implementation may require a deep copy if
 // your configuration has reference types.
 func (c *configuration) Clone() *configuration {
 	var clone = *c
+
+	clone.ProxyRules = make([]ProxyRule, len(c.ProxyRules))
+	for i1, ca := range c.ProxyRules {
+		caClone := ProxyRule{}
+		caClone.ActionRegExp = ca.ActionRegExp
+		caClone.BotUserId = ca.BotUserId
+
+		clone.ProxyRules[i1] = caClone
+	}
+
 	return &clone
 }
 
@@ -64,6 +82,8 @@ func (p *Plugin) setConfiguration(configuration *configuration) {
 
 		panic("setConfiguration called with the existing configuration")
 	}
+
+	fmt.Printf("setConfiguration configuration %v", configuration)
 
 	p.configuration = configuration
 }

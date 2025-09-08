@@ -1,4 +1,5 @@
-# Plugin Starter Template
+# Mattermost plugin to redirect interactive message actions to websocket proxy events
+(for bots connected to sockets directly)
 
 [![Build Status](https://github.com/mattermost/mattermost-plugin-starter-template/actions/workflows/ci.yml/badge.svg)](https://github.com/mattermost/mattermost-plugin-starter-template/actions/workflows/ci.yml)
 [![E2E Status](https://github.com/mattermost/mattermost-plugin-starter-template/actions/workflows/e2e.yml/badge.svg)](https://github.com/mattermost/mattermost-plugin-starter-template/actions/workflows/e2e.yml)

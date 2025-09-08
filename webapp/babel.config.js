@@ -26,6 +26,13 @@ const config = {
         ['@emotion/babel-preset-css-prop'],
     ],
     plugins: [
+        [
+            'babel-plugin-styled-components',
+            {
+                ssr: false,
+                fileName: false,
+            },
+        ],
         'babel-plugin-typescript-to-proptypes',
     ],
 };
