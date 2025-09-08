@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"regexp"
 
 	"github.com/gorilla/mux"
 	"github.com/mattermost/mattermost/server/public/model"
@@ -14,7 +13,7 @@ import (
 )
 
 type ApiInteractiveMessageActionResponse struct {
-	Update struct {
+	Update *struct {
 		Message *string `json:"message"`
 	} `json:"update"`
 	Props            *any    `json:"props"`
@@ -54,19 +53,6 @@ func respondErr(w http.ResponseWriter, code int, err error) (int, error) {
 	return code, err
 }
 
-func respondJSON(w http.ResponseWriter, obj any) (int, error) {
-	data, err := json.Marshal(obj)
-	if err != nil {
-		return respondErr(w, http.StatusInternalServerError, errors.New("failed to marshal response"))
-	}
-	w.Header().Set("Content-Type", "application/json")
-	_, err = w.Write(data)
-	if err != nil {
-		return http.StatusInternalServerError, errors.New("failed to write response")
-	}
-	return http.StatusOK, nil
-}
-
 func (p *Plugin) Handler(w http.ResponseWriter, r *http.Request) {
 	body, bodyReadError := io.ReadAll(r.Body)
 	if bodyReadError != nil {
@@ -84,25 +70,17 @@ func (p *Plugin) Handler(w http.ResponseWriter, r *http.Request) {
 
 	context := data["context"]
 
-	var action string
+	var userId string
 	if ctxMap, ok := context.(map[string]any); ok {
-		action = fmt.Sprintf("%v", ctxMap["action"])
+		userId = fmt.Sprintf("%v", ctxMap["user_id"])
 	} else {
 		respondErr(w, http.StatusBadRequest, errors.New("failed to parse context"))
 		return
 	}
 
-	config := p.getConfiguration()
-
-	for _, proxyRule := range config.ProxyRules {
-		re := regexp.MustCompile(proxyRule.ActionRegExp)
-
-		if re.MatchString(action) {
-			p.API.PublishWebSocketEvent("action", data, &model.WebsocketBroadcast{
-				UserId: proxyRule.BotUserId,
-			})
-		}
+	if len(userId) > 0 {
+		p.API.PublishWebSocketEvent(WsEventAction, data, &model.WebsocketBroadcast{
+			UserId: userId,
+		})
 	}
-
-	respondJSON(w, ApiInteractiveMessageActionResponse{})
 }
