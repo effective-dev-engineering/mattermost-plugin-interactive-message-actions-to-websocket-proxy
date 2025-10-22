@@ -1,7 +1,7 @@
 {
     "id": "mattermost-plugin-interactive-message-actions-to-websocket-proxy",
     "name": "Interactive Message Actions to Websocket",
-    "description": "Mattermost plugin to redirect interactive message actions to websocket proxy events (for bots connected to sockets directly)",
+    "description": "Mattermost plugin for forwarding message interactions to WebSocket proxy events (for bots directly connected to sockets)",
     "version": "0.9.0",
     "homepage_url": "https://github.com/danilvalov/mattermost-plugin-interactive-message-actions-to-websocket-proxy",
     "support_url": "https://github.com/danilvalov/mattermost-plugin-interactive-message-actions-to-websocket-proxy/issues",

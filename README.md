@@ -37,7 +37,7 @@ props: {
 }
 ```
 
-1. Press your button` (or choice some option in your select if you use `select` type) under your post in Mattermost to send a PublishWebSocketEvent
+1. Press your `button` (or choice some option in your select if you use `select` type) under your post in Mattermost to send a PublishWebSocketEvent
 
 2. Handle your websocket event:
 ```json
